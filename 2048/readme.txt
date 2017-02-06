@@ -1,0 +1,32 @@
+2048分析
+1. main.js
+(1)prepare_for_mobile
+	根据屏幕大小，自适应处理，设置盒子容器及格子的大小
+(2)new_game
+	1)init初始化棋盘
+		a.双层循环，计算每一个格子的left和top位置
+			祖先元素div，即盒子容器position为relative，格子元素position为absolute，相对于祖先元素进行定位
+			margin:auto即自适应居中
+		b.初始化board数组（每个格子的数字）及has_conflicted数组（解决连续消除的标记）
+		c.update_board_view
+			移除所有数字
+			根据board为每个格子写入数字，并设置数字样式
+		d.update_score
+			重置分数
+	2)generate_one_number随机产生两个数字
+		a.判断是否还有空余位置，空余位置随机产生数字2或4
+		b.show_number_with_animation动画效果出现新产生的数字
+(3)keydown按键事件处理：上右下左四个方位键表示四个方向的移动
+	1)move_left
+		a.can_move_left判断是否可以左移
+			若左边有0或者有与当前格子相同数字，则可以左移，只要有一个满足条件的格子则整个容器可以左移
+		b.从每行第二列开始判断，格子是否为空，不空才需要移动，找到非空格子a后看此行从第一列开始的格子：
+			若格子b无值且中间也无值，则可以移动到此处，修改board数组；
+			若格子b值与a值相同，中间无值，且格子b处has_conflicted值为false，修改值更新分数，格子b的has_conflicted值设为true
+		c.update_board_view
+	2)move_right move_up move_down与1)move_left类似
+(4)addEventListener触摸事件
+	1)触摸开始判定位置
+	2)移动行为不管
+	3)触摸结束，根据开始和结束的位置变换情况判断上右下左情况
+(5)每次操作后，设置定时器，generate_one_number随机产生一个数字，且is_gameover判断游戏状态
